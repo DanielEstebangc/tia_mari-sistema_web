@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-# Migraciones de base de datos
+# Instala las dependencias
+pip install -r requirements.txt
+
+# Aplica migraciones automáticamente
 python manage.py migrate
 
-# Crear superusuario automáticamente (opcional y más avanzado — mejor hacerlo manualmente si puedes)
-# echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'adminpass')" | python manage.py shell
+# (Opcional) Puedes crear el superusuario con datos fijos si quieres
+# echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'adminpass')" | python manage.py shell
