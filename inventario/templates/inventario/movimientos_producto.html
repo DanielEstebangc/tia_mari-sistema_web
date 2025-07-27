@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Movimientos - {{ producto.nombre }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Movimientos de: {{ producto.nombre }}</h2>
+
+    <div class="mb-3">
+        <a href="{% url 'lista_productos' %}" class="btn btn-secondary">← Volver a Productos</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Entradas</h4>
+            <table class="table table-bordered table-sm">
+                <thead class="table-success">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Cantidad</th>
+                        <th>Observación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entrada in entradas %}
+                    <tr>
+                        <td>{{ entrada.fecha|date:"d/m/Y H:i" }}</td>
+                        <td>{{ entrada.cantidad }}</td>
+                        <td>{{ entrada.observacion }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="3">No hay entradas.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-6">
+            <h4>Salidas</h4>
+            <table class="table table-bordered table-sm">
+                <thead class="table-warning">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Cantidad</th>
+                        <th>Observación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for salida in salidas %}
+                    <tr>
+                        <td>{{ salida.fecha|date:"d/m/Y H:i" }}</td>
+                        <td>{{ salida.cantidad }}</td>
+                        <td>{{ salida.observacion }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="3">No hay salidas.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

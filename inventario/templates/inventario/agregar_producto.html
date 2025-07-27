@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Producto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h2 class="mb-4">Agregar Producto</h2>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre del producto</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required>
+        </div>
+
+       <div class="mb-3">
+         <label for="descripcion" class="form-label">Descripción del producto</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" rows="3"placeholder="Ej: Conserva artesanal de tomate de árbol, sin conservantes. Ideal para postres y acompañamientos."></textarea>
+            <small class="form-text text-muted">
+            Describe brevemente el producto, sus ingredientes principales y posibles usos.
+            </small>
+        </div>
+        
+        <div class="mb-3">
+            <label for="precio" class="form-label">Precio</label>
+            <input type="number" step="0.01" class="form-control" id="precio" name="precio" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="stock_actual" class="form-label">Stock actual</label>
+            <input type="number" class="form-control" id="stock_actual" name="stock_actual" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar Producto</button>
+        <a href="{% url 'lista_productos' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+</body>
+</html>
