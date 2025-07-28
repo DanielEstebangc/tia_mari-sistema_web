@@ -22,6 +22,8 @@ from django.urls import path,include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('inventario/', include('inventario.urls')),  # aquí se enlazan las rutas del app
+    path('', RedirectView.as_view(url='/inventario/', permanent=False)),  # <-- redirección aquí
+
 
     
 ]
