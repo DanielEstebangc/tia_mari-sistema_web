@@ -35,9 +35,25 @@ class Cliente(models.Model):
         return self.nombre
 
 class Pedido(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="pedidos")
+    ESTADOS = [
+        ('pendiente', 'Pendiente'),
+        ('entregado', 'Entregado'),
+        ('cancelado', 'Cancelado'),
+    ]
+
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     fecha = models.DateTimeField(auto_now_add=True)
     observaciones = models.TextField(blank=True)
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
 
     def __str__(self):
-        return f"Pedido #{self.id} de {self.cliente.nombre}"
+        return f'Pedido #{self.id} - {self.cliente.nombre}'
+
+
+class ProductoPedido(models.Model):
+    pedido = models.ForeignKey('Pedido', on_delete=models.CASCADE, related_name='productos_pedido')
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.producto.nombre} x {self.cantidad}"

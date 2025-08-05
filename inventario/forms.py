@@ -3,6 +3,9 @@ from .models import Producto
 from .models import Entrada, Salida
 from .models import Cliente
 from .models import Pedido
+from .models import ProductoPedido
+from django.forms import modelformset_factory
+
 
 
 class ProductoForm(forms.ModelForm):
@@ -34,3 +37,15 @@ class PedidoForm(forms.ModelForm):
         widgets = {
             'observaciones': forms.Textarea(attrs={'rows': 3}),
         }
+
+class ProductoPedidoForm(forms.ModelForm):
+    class Meta:
+        model = ProductoPedido
+        fields = ['producto', 'cantidad']
+
+ProductoPedidoFormSet = modelformset_factory(
+    ProductoPedido,
+    form=ProductoPedidoForm,
+    extra=1,
+    can_delete=False
+)
