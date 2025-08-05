@@ -77,9 +77,22 @@ WSGI_APPLICATION = 'tiamariweb.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(default=config('DATABASE_URL'))
-}
+# Detectar si estás en Render (producción)
+if os.environ.get('RENDER') == 'true':
+    DATABASES = {
+        'default': dj_database_url.config(default=config('DATABASE_URL'))
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'tia_mary_inv',
+            'USER': 'root',
+            'PASSWORD': '3107',
+            'HOST': 'localhost',
+            'PORT': '3306',
+        }
+    }
 
 
 # Password validation

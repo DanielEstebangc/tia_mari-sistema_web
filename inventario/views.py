@@ -1,12 +1,14 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from .models import Producto
+from .models import Producto, Entrada, Salida, Cliente
 from django.db.models import Sum, Count
 from .forms import ProductoForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .forms import EntradaForm, SalidaForm
-from .models import Entrada, Salida
+from .forms import EntradaForm, SalidaForm, ClienteForm
+from django.db import IntegrityError
+from django.core.exceptions import ValidationError
+
 
 
 
@@ -102,6 +104,8 @@ def buscar_producto(request):
     productos = Producto.objects.filter(nombre__icontains=query)
     return render(request, 'inventario/buscar.html', {'productos': productos})
 
+
+
 def resumen_inventario(request):
     total_productos = Producto.objects.count()
     total_unidades = Producto.objects.aggregate(Sum('stock'))['stock__sum']
@@ -110,6 +114,44 @@ def resumen_inventario(request):
         'total_unidades': total_unidades,
     })
 
-Producto.objects.aaggregate(Sum('stock_actual'), Count('id'))
+Producto.objects.aggregate(Sum('stock_actual'), Count('id'))
 
+
+# Vistas para registrar un cliente
+def lista_clientes(request):
+    clientes = Cliente.objects.all()
+    return render(request, 'clientes/lista_clientes.html', {'clientes': clientes})
+
+def agregar_cliente(request):
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            try:
+                form.save()
+                return redirect('lista_clientes')
+            except IntegrityError:
+                form.add_error('correo', 'Este correo ya está registrado.')
+        # Si no es válido, se vuelve a mostrar el formulario con errores
+    else:
+        form = ClienteForm()
+    
+    return render(request, 'clientes/agregar_cliente.html', {'form': form})
+
+def editar_cliente(request, id):
+    cliente = get_object_or_404(Cliente, id=id)
+    if request.method == 'POST':
+        form = ClienteForm(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_clientes')
+    else:
+        form = ClienteForm(instance=cliente)
+    return render(request, 'clientes/editar_cliente.html', {'form': form})
+
+def eliminar_cliente(request, id):
+    cliente = get_object_or_404(Cliente, id=id)
+    if request.method == 'POST':
+        cliente.delete()
+        return redirect('lista_clientes')
+    return render(request, 'clientes/eliminar_cliente.html', {'cliente': cliente})
     
