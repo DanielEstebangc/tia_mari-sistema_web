@@ -1,11 +1,11 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from .models import Producto, Entrada, Salida, Cliente
+from .models import Producto, Entrada, Salida, Cliente,  Pedido
 from django.db.models import Sum, Count
 from .forms import ProductoForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .forms import EntradaForm, SalidaForm, ClienteForm
+from .forms import EntradaForm, SalidaForm, ClienteForm, PedidoForm
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 
@@ -155,3 +155,35 @@ def eliminar_cliente(request, id):
         return redirect('lista_clientes')
     return render(request, 'clientes/eliminar_cliente.html', {'cliente': cliente})
     
+# Vistas para registrar un pedido
+def lista_pedidos(request):
+    pedidos = Pedido.objects.all().order_by('-fecha')
+    return render(request, 'pedidos/lista_pedidos.html', {'pedidos': pedidos})
+
+def crear_pedido(request):
+    if request.method == 'POST':
+        form = PedidoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_pedidos')
+    else:
+        form = PedidoForm()
+    return render(request, 'pedidos/formulario.html', {'form': form})
+
+def editar_pedido(request, pk):
+    pedido = get_object_or_404(Pedido, pk=pk)
+    if request.method == 'POST':
+        form = PedidoForm(request.POST, instance=pedido)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_pedidos')
+    else:
+        form = PedidoForm(instance=pedido)
+    return render(request, 'pedidos/formulario.html', {'form': form})
+
+def eliminar_pedido(request, pk):
+    pedido = get_object_or_404(Pedido, pk=pk)
+    if request.method == 'POST':
+        pedido.delete()
+        return redirect('lista_pedidos')
+    return render(request, 'pedidos/confirmar_eliminar.html', {'pedido': pedido})

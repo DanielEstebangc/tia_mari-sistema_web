@@ -2,6 +2,7 @@ from django import forms
 from .models import Producto
 from .models import Entrada, Salida
 from .models import Cliente
+from .models import Pedido
 
 
 class ProductoForm(forms.ModelForm):
@@ -23,3 +24,13 @@ class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
         fields = '__all__'
+
+
+
+class PedidoForm(forms.ModelForm):
+    class Meta:
+        model = Pedido
+        fields = ['cliente', 'observaciones']
+        widgets = {
+            'observaciones': forms.Textarea(attrs={'rows': 3}),
+        }
