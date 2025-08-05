@@ -33,3 +33,11 @@ class Cliente(models.Model):
 
     def __str__(self):
         return self.nombre
+
+class Pedido(models.Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="pedidos")
+    fecha = models.DateTimeField(auto_now_add=True)
+    observaciones = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"Pedido #{self.id} de {self.cliente.nombre}"
