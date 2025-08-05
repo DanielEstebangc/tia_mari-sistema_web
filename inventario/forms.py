@@ -43,6 +43,21 @@ class ProductoPedidoForm(forms.ModelForm):
         model = ProductoPedido
         fields = ['producto', 'cantidad']
 
+    def clean(self):
+        cleaned_data = super().clean()
+        producto = cleaned_data.get('producto')
+        cantidad = cleaned_data.get('cantidad')
+
+        if producto and cantidad:
+            if cantidad > producto.stock_actual:
+                raise forms.ValidationError(
+                    f"No hay suficiente stock para '{producto.nombre}'. "
+                    f"Stock disponible: {producto.stock_actual}."
+                )
+
+        return cleaned_data
+
+# Formset para múltiples productos en un solo pedido
 ProductoPedidoFormSet = modelformset_factory(
     ProductoPedido,
     form=ProductoPedidoForm,
