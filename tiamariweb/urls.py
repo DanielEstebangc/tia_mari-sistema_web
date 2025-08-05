@@ -19,12 +19,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from django.views.generic import RedirectView
+from inventario import views as inventario_views  # o cambia el nombre según tu app
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('inventario/', include('inventario.urls')),  # aquí se enlazan las rutas del app
-    path('', RedirectView.as_view(url='/inventario/', permanent=False)),  # <-- redirección aquí
+    path('', inventario_views.inicio, name='inicio'),
+
+    # path('', RedirectView.as_view(url='/inventario/', permanent=False)),  # <-- redirección aquí
 
 
     

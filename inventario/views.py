@@ -199,3 +199,6 @@ def crear_pedido(request):
         'pedido_form': pedido_form,
         'formset': formset
     })
+
+def inicio(request):
+    return render(request, 'inicio.html')
